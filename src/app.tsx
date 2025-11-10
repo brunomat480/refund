@@ -1,14 +1,11 @@
-import Icon from '@/assets/icons/magnifying-glass.svg?react';
-import { Button } from '@/components/button';
-import Container from '@/components/container';
+import { BrowserRouter } from 'react-router';
+
+import { Router } from '@/router';
 
 export function App() {
   return (
-    <Container>
-      <Button asChild variant="default" className="max-w-md">
-        <Icon className="size-6" />
-        <a href="/">Link</a>
-      </Button>
-    </Container>
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
   );
 }
