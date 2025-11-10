@@ -1,3 +1,9 @@
+import { Button } from '@/components/button';
+
 export function App() {
-  return <h1>APP</h1>;
+  return (
+    <Button asChild disabled>
+      <a href="/">Link</a>
+    </Button>
+  );
 }

@@ -8,7 +8,8 @@ export const textVariants = cva('font-sans text-gray-200', {
       subtitle: 'font-bold text-xl',
       body: 'text-sm font-normal',
       label: 'text-base font-normal',
-      medium: 'text-sm font-semibold',
+      'medium-bold': 'text-sm font-bold',
+      'medium-semibold': 'text-sm font-semibold',
     },
   },
   defaultVariants: {
