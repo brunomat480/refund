@@ -1,10 +1,10 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import React, { type ReactNode } from 'react';
 
-export const cardVariants = cva('rounded-2xl bg-gray-500 shadow-sm', {
+export const containerVariants = cva('mx-auto', {
   variants: {
     size: {
-      md: 'p-10',
+      md: 'max-w-lg px-2',
     },
   },
   defaultVariants: {
@@ -12,17 +12,22 @@ export const cardVariants = cva('rounded-2xl bg-gray-500 shadow-sm', {
   },
 });
 
-interface CardProps extends VariantProps<typeof cardVariants> {
+interface ContainerProps extends VariantProps<typeof containerVariants> {
   as?: keyof React.JSX.IntrinsicElements;
   children: ReactNode;
   className?: string;
 }
 
-export function Card({ as = 'div', size, children, className }: CardProps) {
+export default function Container({
+  as = 'div',
+  children,
+  className,
+  size,
+}: ContainerProps) {
   return React.createElement(
     as,
     {
-      className: cardVariants({ size, className }),
+      className: containerVariants({ size, className }),
     },
     children
   );
