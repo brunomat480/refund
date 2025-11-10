@@ -14,12 +14,12 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-green-100 text-sm font-bold text-white hover:bg-green-200',
-        ghost:
-          'bg-transparent hover:bg-gray-400/40 text-gray-200 text-sm font-semibold hover:text-green-100 active:text-gray-100',
+        default:
+          'bg-green-100 text-sm font-bold text-white hover:bg-green-200 fill-white',
+        link: 'bg-transparent  text-gray-200 text-sm font-semibold hover:text-green-100 active:text-gray-100 fill-gray-200 hover:fill-green-100 active:fill-green-100',
       },
       size: {
-        md: 'h-12 px-5 py-3.5',
+        md: 'w-full h-12 px-5 py-3.5',
         icon: 'size-12 p-3',
       },
       disabled: {
