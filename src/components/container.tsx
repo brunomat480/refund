@@ -4,7 +4,7 @@ import React, { type ReactNode } from 'react';
 export const containerVariants = cva('mx-auto', {
   variants: {
     size: {
-      md: 'max-w-lg px-2',
+      md: 'max-w-6xl px-2',
     },
   },
   defaultVariants: {
