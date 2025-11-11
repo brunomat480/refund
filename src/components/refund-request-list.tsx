@@ -10,9 +10,6 @@ export function RefundRequestList({ ...props }: RefundRequestListProps) {
       <RefundRequest />
       <RefundRequest />
       <RefundRequest />
-      <RefundRequest />
-      <RefundRequest />
-      <RefundRequest />
     </div>
   );
 }

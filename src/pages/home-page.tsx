@@ -9,13 +9,15 @@ import { Text } from '@/components/text';
 export function HomePage() {
   return (
     <Container>
-      <Card className="mx-auto max-w-270.5 space-y-6">
-        <Text as="h1" variant="heading" className="text-gray-100">
-          Solicitações
-        </Text>
-        <Search />
-        <Divider orientation="horizontal" />
-        <RefundRequestList />
+      <Card className="mx-auto flex h-146 max-w-270.5 flex-col justify-between">
+        <div className="space-y-6">
+          <Text as="h1" variant="heading" className="text-gray-100">
+            Solicitações
+          </Text>
+          <Search />
+          <Divider orientation="horizontal" />
+          <RefundRequestList />
+        </div>
         <Pagination />
       </Card>
     </Container>
