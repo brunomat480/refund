@@ -1,13 +1,22 @@
 import ForkKnifeIcon from '@/assets/icons/fork-knife.svg?react';
+import { Skeleton } from '@/components/skeleton';
 import { Text } from '@/components/text';
 
-export function RefundRequest() {
+interface RefundRequestProps {
+  loading?: boolean;
+}
+
+export function RefundRequest({ loading }: RefundRequestProps) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <div className="flex size-8 items-center justify-center rounded-full bg-gray-400 p-2">
-          <ForkKnifeIcon className="size-4.5 fill-green-100" />
-        </div>
+        {loading ? (
+          <div className="flex size-8 items-center justify-center rounded-full bg-gray-400 p-2">
+            <ForkKnifeIcon className="size-4.5 fill-green-100" />
+          </div>
+        ) : (
+          <Skeleton rounded="full" className="size-8" />
+        )}
         <div className="flex flex-col">
           <Text as="strong" variant="medium-bold" className="text-gray-100">
             Rodrigo

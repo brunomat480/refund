@@ -13,13 +13,9 @@ export function HomePage() {
         <Text as="h1" variant="heading" className="text-gray-100">
           Solicitações
         </Text>
-
         <Search />
-
         <Divider orientation="horizontal" />
-
         <RefundRequestList />
-
         <Pagination />
       </Card>
     </Container>
