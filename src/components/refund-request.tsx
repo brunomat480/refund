@@ -41,7 +41,9 @@ export function RefundRequest({ loading }: RefundRequestProps) {
           <Text as="small" variant="small">
             R$
           </Text>
-          <Text variant="medium-semibold">34,78</Text>
+          <Text variant="medium-semibold" className="text-gray-100">
+            34,78
+          </Text>
         </span>
       ) : (
         <Skeleton className="h-6 w-12" />

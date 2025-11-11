@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export const textVariants = cva('font-sans text-gray-200', {
   variants: {
@@ -34,7 +35,7 @@ export function Text({
   return React.createElement(
     as,
     {
-      className: textVariants({ variant, className }),
+      className: twMerge(textVariants({ variant }), className),
       ...props,
     },
     children
