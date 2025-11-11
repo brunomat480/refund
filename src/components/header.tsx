@@ -8,7 +8,7 @@ export function Header() {
   return (
     <Container
       as="header"
-      className="flex flex-wrap items-center justify-center gap-y-4 py-10 lg:justify-between lg:px-22.5"
+      className="flex flex-wrap items-center justify-center gap-y-4 py-10 lg:justify-between"
     >
       <Link to="/">
         <Logo />
