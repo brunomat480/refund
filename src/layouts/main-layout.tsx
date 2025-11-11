@@ -4,9 +4,9 @@ import { Header } from '@/components/header';
 
 export function MainLayout() {
   return (
-    <div className="h-screen bg-gray-400">
+    <div className="bg-gray-400">
       <Header />
-      <main className="mt-10">
+      <main className="mt-10 h-screen pb-14">
         <Outlet />
       </main>
     </div>

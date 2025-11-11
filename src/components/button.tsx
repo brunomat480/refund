@@ -19,6 +19,7 @@ export const buttonVariants = cva(
         link: 'bg-transparent text-gray-200 text-sm font-semibold hover:text-green-100 active:text-gray-100 fill-gray-200 hover:fill-green-100 active:fill-green-100',
       },
       size: {
+        sm: 'size-8 p-1',
         md: 'h-12 px-5 py-3.5',
         icon: 'size-12 p-3',
       },
