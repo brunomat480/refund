@@ -7,9 +7,10 @@ export const textVariants = cva('font-sans text-gray-200', {
       heading: 'font-bold text-2xl',
       subtitle: 'font-bold text-xl',
       body: 'text-sm font-normal',
-      label: 'text-base font-normal',
+      label: 'text-[0.625rem] font-normal',
       'medium-bold': 'text-sm font-bold',
       'medium-semibold': 'text-sm font-semibold',
+      small: 'font-normal text-xs',
     },
   },
   defaultVariants: {

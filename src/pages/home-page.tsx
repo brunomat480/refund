@@ -1,6 +1,7 @@
 import { Card } from '@/components/card';
 import Container from '@/components/container';
 import Divider from '@/components/divider';
+import { RefundRequest } from '@/components/refund-request';
 import { Search } from '@/components/search';
 import { Text } from '@/components/text';
 
@@ -15,6 +16,10 @@ export function HomePage() {
         <Search />
 
         <Divider orientation="horizontal" className="" />
+
+        <div>
+          <RefundRequest />
+        </div>
       </Card>
     </Container>
   );
