@@ -1,7 +1,7 @@
 import { Card } from '@/components/card';
 import Container from '@/components/container';
 import Divider from '@/components/divider';
-import { RefundRequest } from '@/components/refund-request';
+import { RefundRequestList } from '@/components/refund-request-list';
 import { Search } from '@/components/search';
 import { Text } from '@/components/text';
 
@@ -15,11 +15,9 @@ export function HomePage() {
 
         <Search />
 
-        <Divider orientation="horizontal" className="" />
+        <Divider orientation="horizontal" />
 
-        <div>
-          <RefundRequest />
-        </div>
+        <RefundRequestList />
       </Card>
     </Container>
   );
