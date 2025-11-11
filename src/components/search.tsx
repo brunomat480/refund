@@ -12,7 +12,7 @@ export function Search() {
         <Input id="search" placeholder="Pesquisar pelo nome" />
       </div>
 
-      <Button size="icon" type="submit">
+      <Button size="icon" type="submit" disabled>
         <MagnifyingGlassIcon className="size-6" />
       </Button>
     </form>

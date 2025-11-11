@@ -4,11 +4,11 @@ import type { ComponentProps } from 'react';
 import { Text } from '@/components/text';
 
 export const inputVariants = cva(
-  ' w-full rounded-lg border border-gray-300 text-sm outline-none hover:transition hover:duration-200 focus:border-[1.5px] focus:border-green-100 disabled:opacity-50',
+  'font-sans font-normal w-full border border-gray-300 text-sm outline-none hover:transition hover:duration-200 focus:border-[1.5px] focus:border-green-100 disabled:opacity-50 placeholder:text-gray-200 data-[error=true]:border-red-500',
   {
     variants: {
       size: {
-        md: 'h-12 px-4',
+        md: 'h-12 px-4 rounded-lg',
       },
     },
     defaultVariants: {
@@ -16,6 +16,8 @@ export const inputVariants = cva(
     },
   }
 );
+
+export const inputWrapperVariants = cva('group flex w-full flex-col gap-2');
 
 interface InputProps
   extends Omit<ComponentProps<'input'>, 'size'>,
@@ -25,17 +27,18 @@ interface InputProps
 
 export function Input({ size, className, label, ...props }: InputProps) {
   return (
-    <div>
+    <div className={inputWrapperVariants({ className })}>
       {label && (
-        <Text as="label" variant="label" htmlFor={props.name}>
+        <Text
+          as="label"
+          variant="label"
+          htmlFor={props.name}
+          className="group-focus-within:text-green-100"
+        >
           {label}
         </Text>
       )}
-      <input
-        id={props.name}
-        className={inputVariants({ size, className })}
-        {...props}
-      />
+      <input id={props.name} className={inputVariants({ size })} {...props} />
     </div>
   );
 }
