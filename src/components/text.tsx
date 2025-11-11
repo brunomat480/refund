@@ -1,11 +1,12 @@
 import { cva, type VariantProps } from 'class-variance-authority';
+import type { as } from 'node_modules/react-router/dist/development/instrumentation-iAqbU5Q4';
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 export const textVariants = cva('font-sans text-gray-200', {
   variants: {
     variant: {
-      heading: 'font-bold text-2xl',
+      heading: 'font-bold text-xl',
       subtitle: 'font-bold text-xl',
       body: 'text-sm font-normal',
       label: 'text-[0.625rem] font-normal',
@@ -19,25 +20,28 @@ export const textVariants = cva('font-sans text-gray-200', {
   },
 });
 
-interface TextProps extends VariantProps<typeof textVariants> {
-  as?: keyof React.JSX.IntrinsicElements;
+type TextProps<T extends keyof React.JSX.IntrinsicElements = 'span'> = {
+  as?: T;
   className?: string;
   children?: React.ReactNode;
-}
+} & VariantProps<typeof textVariants> &
+  Omit<React.ComponentPropsWithoutRef<T>, 'className'>;
 
-export function Text({
-  as = 'span',
+export function Text<T extends keyof React.JSX.IntrinsicElements = 'span'>({
+  as,
   className,
   variant,
   children,
   ...props
-}: TextProps) {
-  return React.createElement(
-    as,
-    {
-      className: twMerge(textVariants({ variant }), className),
-      ...props,
-    },
-    children
+}: TextProps<T>) {
+  const Component = (as || 'span') as React.ElementType;
+
+  return (
+    <Component
+      className={twMerge(textVariants({ variant }), className)}
+      {...props}
+    >
+      {children}
+    </Component>
   );
 }
