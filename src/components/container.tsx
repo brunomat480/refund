@@ -18,7 +18,7 @@ interface ContainerProps extends VariantProps<typeof containerVariants> {
   className?: string;
 }
 
-export default function Container({
+export function Container({
   as = 'div',
   children,
   className,

@@ -1,5 +1,5 @@
 import { Card } from '@/components/card';
-import Container from '@/components/container';
+import { Container } from '@/components/container';
 import Divider from '@/components/divider';
 import { Pagination } from '@/components/paginations';
 import { RefundRequestList } from '@/components/refund-request-list';

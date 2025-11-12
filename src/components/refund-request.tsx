@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 import ForkKnifeIcon from '@/assets/icons/fork-knife.svg?react';
 import { Skeleton } from '@/components/skeleton';
 import { Text } from '@/components/text';
@@ -8,7 +10,10 @@ interface RefundRequestProps {
 
 export function RefundRequest({ loading }: RefundRequestProps) {
   return (
-    <div className="flex items-center justify-between">
+    <Link
+      to={'/refund/details/1'}
+      className="flex items-center justify-between"
+    >
       <div className="flex items-center gap-3">
         {!loading ? (
           <div className="flex size-8 items-center justify-center rounded-full bg-gray-400 p-2">
@@ -48,6 +53,6 @@ export function RefundRequest({ loading }: RefundRequestProps) {
       ) : (
         <Skeleton className="h-6 w-12" />
       )}
-    </div>
+    </Link>
   );
 }

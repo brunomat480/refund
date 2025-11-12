@@ -1,6 +1,6 @@
 import { Card } from '@/components/card';
-import Container from '@/components/container';
-import { NewRefundForm } from '@/components/new-refund-form';
+import { Container } from '@/components/container';
+import { RefundForm } from '@/components/refund-form';
 import { Text } from '@/components/text';
 
 export function RefundNewPage() {
@@ -17,7 +17,7 @@ export function RefundNewPage() {
           </Text>
         </div>
 
-        <NewRefundForm />
+        <RefundForm />
       </Card>
     </Container>
   );

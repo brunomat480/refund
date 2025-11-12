@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router';
 
 import Logo from '@/assets/images/refund-logo.svg?react';
 import { Button } from '@/components/button';
-import Container from '@/components/container';
+import { Container } from '@/components/container';
 
 export function Header() {
   const { pathname } = useLocation();

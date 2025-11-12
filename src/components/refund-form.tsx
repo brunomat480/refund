@@ -6,7 +6,7 @@ import { Input } from '@/components/input';
 import { InputFile } from '@/components/input-file';
 import { SelectCategories } from '@/components/select-categories';
 
-export function NewRefundForm() {
+export function RefundForm() {
   const form = useForm();
 
   function formatCurrency(event: ChangeEvent<HTMLInputElement>) {
