@@ -6,7 +6,6 @@ export const textVariants = cva('font-sans text-gray-200', {
   variants: {
     variant: {
       heading: 'font-bold text-xl',
-      subtitle: 'font-bold text-xl',
       body: 'text-sm font-normal',
       label: 'text-[0.625rem] font-normal',
       'medium-bold': 'text-sm font-bold',
