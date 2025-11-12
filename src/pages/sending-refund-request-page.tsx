@@ -20,8 +20,9 @@ export function SendingRefundRequestPage() {
             o setor financeiro irá entrar em contato com você.
           </Text>
         </div>
-
-        <Button className="mt-10 w-full">Nova solicitação</Button>
+        <Button type="button" className="mt-10 w-full">
+          Nova solicitação
+        </Button>
       </Card>
     </Container>
   );

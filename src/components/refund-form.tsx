@@ -5,6 +5,7 @@ import FileIcon from '@/assets/icons/file.svg?react';
 import { Button } from '@/components/button';
 import { Input, inputWrapperVariants } from '@/components/input';
 import { InputFile } from '@/components/input-file';
+import { RefundRequestDeleteModal } from '@/components/refund-request-delete-modal';
 import {
   Select,
   SelectContent,
@@ -86,11 +87,8 @@ export function RefundForm({ view }: RefundFormProps) {
         </div>
 
         {view ? (
-          <Button
-            variant="link"
-            className="group mx-auto text-green-100 hover:text-green-200"
-          >
-            <FileIcon className="size-4.5 stroke-green-100 stroke-12 group-hover:stroke-green-200" />
+          <Button variant="link" className="group mx-auto">
+            <FileIcon className="size-4.5 stroke-gray-200 stroke-12 group-hover:stroke-green-100 group-active:stroke-green-100" />
             Abrir comprovante
           </Button>
         ) : (
@@ -102,7 +100,9 @@ export function RefundForm({ view }: RefundFormProps) {
         )}
 
         {view ? (
-          <Button className="w-full">Excluir</Button>
+          <RefundRequestDeleteModal>
+            <Button className="w-full">Excluir</Button>
+          </RefundRequestDeleteModal>
         ) : (
           <Button disabled type="submit" className="w-full">
             Enviar
