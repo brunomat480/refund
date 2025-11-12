@@ -1,12 +1,32 @@
 import type { ChangeEvent } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import FileIcon from '@/assets/icons/file.svg?react';
 import { Button } from '@/components/button';
-import { Input } from '@/components/input';
+import { Input, inputWrapperVariants } from '@/components/input';
 import { InputFile } from '@/components/input-file';
-import { SelectCategories } from '@/components/select-categories';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/select';
+import { Text } from '@/components/text';
 
-export function RefundForm() {
+const options = [
+  { value: 'alimentacao', label: 'Alimentação' },
+  { value: 'hospedagem', label: 'Hospedagem' },
+  { value: 'transporte', label: 'Transporte' },
+  { value: 'servicos', label: 'Serviços' },
+  { value: 'outros', label: 'Outros' },
+];
+
+interface RefundFormProps {
+  view?: boolean;
+}
+
+export function RefundForm({ view }: RefundFormProps) {
   const form = useForm();
 
   function formatCurrency(event: ChangeEvent<HTMLInputElement>) {
@@ -24,14 +44,40 @@ export function RefundForm() {
   return (
     <FormProvider {...form}>
       <form className="mt-10 space-y-6">
-        <Input label="NOME DA SOLICITAÇÃO" {...form.register('name_refund')} />
+        <Input
+          label="NOME DA SOLICITAÇÃO"
+          disabled={view}
+          {...form.register('name_refund')}
+        />
 
         <div className="flex flex-wrap items-start gap-4 sm:flex-nowrap">
-          <SelectCategories />
+          <div className={inputWrapperVariants()}>
+            <Text
+              as="label"
+              variant="label"
+              htmlFor="category"
+              className="group-focus-within:text-green-100"
+            >
+              CATEGORIA
+            </Text>
+            <Select>
+              <SelectTrigger disabled={view} id="category">
+                <SelectValue placeholder="Selecione" />
+              </SelectTrigger>
+              <SelectContent>
+                {options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
           <Input
             label="VALOR"
             placeholder="0,00"
+            disabled={view}
             className="sm:max-w-38.5"
             {...form.register('amount', {
               onChange: formatCurrency,
@@ -39,11 +85,29 @@ export function RefundForm() {
           />
         </div>
 
-        <InputFile allowedExtensions={['pdf']} maxFileSizeInMB={5} />
+        {view ? (
+          <Button
+            variant="link"
+            className="group mx-auto text-green-100 hover:text-green-200"
+          >
+            <FileIcon className="size-4.5 stroke-green-100 stroke-12 group-hover:stroke-green-200" />
+            Abrir comprovante
+          </Button>
+        ) : (
+          <InputFile
+            disabled={view}
+            allowedExtensions={['pdf']}
+            maxFileSizeInMB={5}
+          />
+        )}
 
-        <Button disabled type="submit" className="w-full">
-          Enviar
-        </Button>
+        {view ? (
+          <Button className="w-full">Excluir</Button>
+        ) : (
+          <Button disabled type="submit" className="w-full">
+            Enviar
+          </Button>
+        )}
       </form>
     </FormProvider>
   );

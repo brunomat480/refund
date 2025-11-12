@@ -18,7 +18,7 @@ export function RefundDetailsPage() {
             </Text>
           </div>
 
-          <RefundForm />
+          <RefundForm view />
         </Card>
       </Container>
     </Container>
