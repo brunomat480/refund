@@ -6,12 +6,18 @@ import { Text } from '@/components/text';
 
 interface RefundRequestProps {
   loading?: boolean;
+  refund: {
+    id: string;
+    title: string;
+    category: string;
+    value: number;
+  };
 }
 
-export function RefundRequest({ loading }: RefundRequestProps) {
+export function RefundRequest({ refund, loading }: RefundRequestProps) {
   return (
     <Link
-      to={'/refund/details/1'}
+      to={`/refund/details/${refund?.id}`}
       className="flex items-center justify-between"
     >
       <div className="flex items-center gap-3">
@@ -26,10 +32,10 @@ export function RefundRequest({ loading }: RefundRequestProps) {
           {!loading ? (
             <>
               <Text as="strong" variant="medium-bold" className="text-gray-100">
-                Rodrigo
+                {refund?.title}
               </Text>
               <Text as="small" variant="small">
-                Alimentação
+                {refund?.category}
               </Text>
             </>
           ) : (
@@ -47,7 +53,7 @@ export function RefundRequest({ loading }: RefundRequestProps) {
             R$
           </Text>
           <Text variant="medium-semibold" className="text-gray-100">
-            34,78
+            {refund?.value}
           </Text>
         </span>
       ) : (

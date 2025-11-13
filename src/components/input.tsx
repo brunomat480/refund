@@ -26,6 +26,7 @@ interface InputProps
   extends Omit<ComponentProps<'input'>, 'size' | 'disabled'>,
     VariantProps<typeof inputVariants> {
   label?: string;
+  error?: string | undefined;
 }
 
 export function Input({
@@ -33,6 +34,7 @@ export function Input({
   className,
   label,
   disabled,
+  error,
   ...props
 }: InputProps) {
   return (
@@ -48,10 +50,17 @@ export function Input({
         </Text>
       )}
       <input
+        data-error={!!error}
         id={props.name}
         className={inputVariants({ size, disabled })}
         {...props}
       />
+
+      {error && (
+        <Text variant="small" className="text-red-500">
+          {error}
+        </Text>
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
-import type { ChangeEvent } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { type ChangeEvent } from 'react';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 
 import FileIcon from '@/assets/icons/file.svg?react';
 import { Button } from '@/components/button';
@@ -14,13 +15,18 @@ import {
   SelectValue,
 } from '@/components/select';
 import { Text } from '@/components/text';
+import { useRefund } from '@/hooks/refunds/use-refund';
+import {
+  refundNewFormSchema,
+  type refundNewFormType,
+} from '@/schemas/refunds-schema';
 
 const options = [
-  { value: 'alimentacao', label: 'Alimentação' },
-  { value: 'hospedagem', label: 'Hospedagem' },
-  { value: 'transporte', label: 'Transporte' },
-  { value: 'servicos', label: 'Serviços' },
-  { value: 'outros', label: 'Outros' },
+  { value: 'food', label: 'Alimentação' },
+  { value: 'hosting', label: 'Hospedagem' },
+  { value: 'transport', label: 'Transporte' },
+  { value: 'services', label: 'Serviços' },
+  { value: 'other', label: 'Outros' },
 ];
 
 interface RefundFormProps {
@@ -28,7 +34,19 @@ interface RefundFormProps {
 }
 
 export function RefundForm({ view }: RefundFormProps) {
-  const form = useForm();
+  const { createRefund, isCreatingRefund } = useRefund();
+
+  const form = useForm({
+    resolver: zodResolver(refundNewFormSchema),
+    defaultValues: {
+      category: undefined,
+    },
+  });
+
+  const titleError = form.formState.errors.title?.message;
+  const categoryError = form.formState.errors.category?.message;
+  const valueError = form.formState.errors.value?.message;
+  const receiptFileError = form.formState.errors.receiptFile?.message;
 
   function formatCurrency(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value.replace(/\D/g, '');
@@ -42,13 +60,37 @@ export function RefundForm({ view }: RefundFormProps) {
     event.target.value = numericValue.toFixed(2).replace('.', ',');
   }
 
+  async function handleCreateRefund({
+    title,
+    category,
+    value,
+    receiptFile,
+  }: refundNewFormType) {
+    const valueCovertNumber = Number(value.replace(',', '.'));
+
+    console.log({ title, category, value: valueCovertNumber, receiptFile });
+    // try {
+    //   await createRefund({
+    //     title,
+    //     category,
+    //     value,
+    //   });
+    // } catch {
+    //   console.log('ERRO');
+    // }
+  }
+
   return (
     <FormProvider {...form}>
-      <form className="mt-10 space-y-6">
+      <form
+        onSubmit={form.handleSubmit(handleCreateRefund)}
+        className="mt-10 space-y-6"
+      >
         <Input
           label="NOME DA SOLICITAÇÃO"
-          disabled={view}
-          {...form.register('name_refund')}
+          disabled={view || isCreatingRefund}
+          error={titleError}
+          {...form.register('title')}
         />
 
         <div className="flex flex-wrap items-start gap-4 sm:flex-nowrap">
@@ -61,26 +103,47 @@ export function RefundForm({ view }: RefundFormProps) {
             >
               CATEGORIA
             </Text>
-            <Select>
-              <SelectTrigger disabled={view} id="category">
-                <SelectValue placeholder="Selecione" />
-              </SelectTrigger>
-              <SelectContent>
-                {options.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Controller
+              name="category"
+              control={form.control}
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || ''}
+                >
+                  <SelectTrigger
+                    id="category"
+                    data-error={!!categoryError}
+                    disabled={view || isCreatingRefund}
+                    className="data-[error=true]:border-red-500"
+                  >
+                    <SelectValue placeholder="Selecione" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {options.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+
+            {categoryError && (
+              <Text variant="small" className="text-red-500">
+                {categoryError}
+              </Text>
+            )}
           </div>
 
           <Input
             label="VALOR"
             placeholder="0,00"
-            disabled={view}
+            disabled={view || isCreatingRefund}
             className="sm:max-w-38.5"
-            {...form.register('amount', {
+            error={valueError}
+            {...form.register('value', {
               onChange: formatCurrency,
             })}
           />
@@ -92,7 +155,12 @@ export function RefundForm({ view }: RefundFormProps) {
             Abrir comprovante
           </Button>
         ) : (
-          <InputFile allowedExtensions={['pdf']} maxFileSizeInMB={5} />
+          <InputFile
+            allowedExtensions={['pdf']}
+            maxFileSizeInMB={5}
+            error={receiptFileError}
+            {...form.register('receiptFile')}
+          />
         )}
 
         {view ? (
@@ -102,7 +170,7 @@ export function RefundForm({ view }: RefundFormProps) {
             </Button>
           </RefundRequestDeleteModal>
         ) : (
-          <Button disabled type="submit" className="w-full">
+          <Button type="submit" className="w-full">
             Enviar
           </Button>
         )}
