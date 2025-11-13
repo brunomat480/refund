@@ -17,7 +17,7 @@ export const SelectTrigger = ({ children, ...props }: SelectTriggerProps) => (
   <SelectPrimitive.Trigger
     className={inputVariants({
       className:
-        'flex items-center justify-between text-gray-200 [&[data-state=closed]>span>svg]:rotate-90 [&[data-state=open]>span>svg]:-rotate-90',
+        'flex items-center justify-between text-gray-200 not-disabled:hover:border-green-100 [&[data-state=closed]>span>svg]:rotate-90 [&[data-state=open]>span>svg]:-rotate-90',
     })}
     {...props}
   >

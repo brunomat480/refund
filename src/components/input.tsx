@@ -4,11 +4,14 @@ import type { ComponentProps } from 'react';
 import { Text } from '@/components/text';
 
 export const inputVariants = cva(
-  'font-sans font-normal w-full border border-gray-300 text-sm outline-none hover:transition hover:duration-200 focus:border-[1.5px] focus:border-green-100 disabled:opacity-50 placeholder:text-gray-200 data-[error=true]:border-red-500',
+  'font-sans font-normal w-full border border-gray-300 text-sm outline-none hover:transition hover:duration-200 focus:border-[1.5px] focus:border-green-100 placeholder:text-gray-200 data-[error=true]:border-red-500',
   {
     variants: {
       size: {
         md: 'h-12 px-4 rounded-lg',
+      },
+      disabled: {
+        true: 'opacity-50 pointer-events-none',
       },
     },
     defaultVariants: {
@@ -20,12 +23,18 @@ export const inputVariants = cva(
 export const inputWrapperVariants = cva('group flex w-full flex-col gap-2');
 
 interface InputProps
-  extends Omit<ComponentProps<'input'>, 'size'>,
+  extends Omit<ComponentProps<'input'>, 'size' | 'disabled'>,
     VariantProps<typeof inputVariants> {
   label?: string;
 }
 
-export function Input({ size, className, label, ...props }: InputProps) {
+export function Input({
+  size,
+  className,
+  label,
+  disabled,
+  ...props
+}: InputProps) {
   return (
     <div className={inputWrapperVariants({ className })}>
       {label && (
@@ -38,7 +47,11 @@ export function Input({ size, className, label, ...props }: InputProps) {
           {label}
         </Text>
       )}
-      <input id={props.name} className={inputVariants({ size })} {...props} />
+      <input
+        id={props.name}
+        className={inputVariants({ size, disabled })}
+        {...props}
+      />
     </div>
   );
 }
