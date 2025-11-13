@@ -87,21 +87,19 @@ export function RefundForm({ view }: RefundFormProps) {
         </div>
 
         {view ? (
-          <Button variant="link" className="group mx-auto">
+          <Button type="button" variant="link" className="group mx-auto">
             <FileIcon className="size-4.5 stroke-gray-200 stroke-12 group-hover:stroke-green-100 group-active:stroke-green-100" />
             Abrir comprovante
           </Button>
         ) : (
-          <InputFile
-            disabled={view}
-            allowedExtensions={['pdf']}
-            maxFileSizeInMB={5}
-          />
+          <InputFile allowedExtensions={['pdf']} maxFileSizeInMB={5} />
         )}
 
         {view ? (
           <RefundRequestDeleteModal>
-            <Button className="w-full">Excluir</Button>
+            <Button type="button" className="w-full">
+              Excluir
+            </Button>
           </RefundRequestDeleteModal>
         ) : (
           <Button disabled type="submit" className="w-full">

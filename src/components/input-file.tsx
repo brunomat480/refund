@@ -14,6 +14,7 @@ interface InputFileProps extends ComponentProps<'input'> {
 export function InputFile({
   allowedExtensions,
   maxFileSizeInMB,
+  disabled,
   ...props
 }: InputFileProps) {
   const { control, register } = useFormContext();
@@ -42,14 +43,14 @@ export function InputFile({
       <label
         data-error={formFile && (!isValidExtension || !isValidSize)}
         className={inputVariants({
-          className:
-            'relative mt-2 block w-full cursor-pointer overflow-hidden',
+          disabled,
+          className: 'relative mt-2 block w-full overflow-hidden',
         })}
       >
         <input
           type="file"
           id="receipt"
-          className="absolute top-0 right-0 z-10 h-full w-full cursor-pointer rounded-lg bg-transparent text-transparent"
+          className="absolute top-0 right-0 z-10 h-full w-full rounded-lg bg-transparent text-transparent not-disabled:cursor-pointer"
           {...register('file')}
           {...props}
         />
