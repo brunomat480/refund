@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import ForkKnifeIcon from '@/assets/icons/fork-knife.svg?react';
 import { Skeleton } from '@/components/skeleton';
 import { Text } from '@/components/text';
+import { formatCurrency } from '@/utils/format-currency';
 
 interface RefundRequestProps {
   loading?: boolean;
@@ -53,7 +54,7 @@ export function RefundRequest({ refund, loading }: RefundRequestProps) {
             R$
           </Text>
           <Text variant="medium-semibold" className="text-gray-100">
-            {refund?.value}
+            {formatCurrency(refund?.value)}
           </Text>
         </span>
       ) : (

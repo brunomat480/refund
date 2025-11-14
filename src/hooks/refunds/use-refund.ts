@@ -1,15 +1,24 @@
-import { useMutation } from '@tanstack/react-query';
-
-import { createRefund } from '@/services/refunds/create-refund';
+import {
+  createRefund,
+  type CreateRefundBody,
+} from '@/services/refunds/create-refund';
 
 export function useRefund() {
-  const { mutateAsync: createRefundFn, isPending: isCreatingRefund } =
-    useMutation({
-      mutationFn: createRefund,
+  async function createNewRefund({
+    title,
+    category,
+    value,
+    receipt,
+  }: CreateRefundBody) {
+    await createRefund({
+      title,
+      category,
+      value,
+      receipt,
     });
+  }
 
   return {
-    createRefund: createRefundFn,
-    isCreatingRefund,
+    createNewRefund,
   };
 }
