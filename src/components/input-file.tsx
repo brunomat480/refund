@@ -9,19 +9,24 @@ import { Text } from '@/components/text';
 interface InputFileProps extends ComponentProps<'input'> {
   allowedExtensions: string[];
   maxFileSizeInMB: number;
+  error?: string | undefined;
 }
 
 export function InputFile({
   allowedExtensions,
   maxFileSizeInMB,
   disabled,
+  error,
   ...props
 }: InputFileProps) {
-  const { control, register } = useFormContext();
-
+  const { control } = useFormContext();
   const formValues = useWatch({ control });
-  const fileName = formValues.file?.[0]?.name || '';
-  const formFile: File = useMemo(() => formValues.file?.[0], [formValues]);
+  const name = props.name || '';
+  const fileName = formValues[name]?.[0]?.name || '';
+  const formFile: File = useMemo(
+    () => formValues[name]?.[0],
+    [formValues, name]
+  );
 
   const { fileExtension, fileSize } = useMemo(
     () => ({
@@ -41,7 +46,10 @@ export function InputFile({
       </Text>
 
       <label
-        data-error={formFile && (!isValidExtension || !isValidSize)}
+        data-error={
+          (formFile && (!isValidExtension || !isValidSize)) ||
+          (!formFile && !!error)
+        }
         className={inputVariants({
           disabled,
           className: 'relative mt-2 block w-full overflow-hidden',
@@ -51,7 +59,6 @@ export function InputFile({
           type="file"
           id="receipt"
           className="absolute top-0 right-0 z-10 h-full w-full rounded-lg bg-transparent text-transparent not-disabled:cursor-pointer"
-          {...register('file')}
           {...props}
         />
 
@@ -73,17 +80,23 @@ export function InputFile({
           )}
 
           {formFile && !isValidSize && isValidExtension && (
-            <Text as="p" variant="small" className="text-red-500">
+            <Text variant="small" className="text-red-500">
               O arquivo deve ter no máximo {maxFileSizeInMB}MB
             </Text>
           )}
 
           {formFile && !isValidExtension && !isValidSize && (
-            <Text as="p" variant="small" className="text-red-500">
+            <Text variant="small" className="text-red-500">
               A Extensão deve ser .pdf e o tamanho deve ser {maxFileSizeInMB}MB
             </Text>
           )}
         </div>
+      )}
+
+      {error && (
+        <Text variant="small" className="text-red-500">
+          {error}
+        </Text>
       )}
     </div>
   );

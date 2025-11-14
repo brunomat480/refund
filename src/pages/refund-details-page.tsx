@@ -1,9 +1,15 @@
+import { useParams } from 'react-router';
+
 import { Card } from '@/components/card';
 import { Container } from '@/components/container';
 import { RefundForm } from '@/components/refund-form';
 import { Text } from '@/components/text';
+import { useRefund } from '@/hooks/refunds/use-refund';
 
 export function RefundDetailsPage() {
+  const { id } = useParams();
+  const { refund, isLoadingRefund } = useRefund(id);
+
   return (
     <Container>
       <Container>
@@ -18,7 +24,17 @@ export function RefundDetailsPage() {
             </Text>
           </div>
 
-          <RefundForm view />
+          <RefundForm
+            view
+            refund={{
+              id: refund?.id,
+              title: refund?.title,
+              category: refund?.category,
+              value: refund?.value,
+              receiptId: refund?.receipt?.id,
+            }}
+            loading={isLoadingRefund}
+          />
         </Card>
       </Container>
     </Container>

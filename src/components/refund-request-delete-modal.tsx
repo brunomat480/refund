@@ -1,5 +1,6 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 
+import CircleNotchIcon from '@/assets/icons/circle-notch.svg?react';
 import { Button } from '@/components/button';
 import {
   Dialog,
@@ -11,13 +12,24 @@ import { Text } from '@/components/text';
 
 interface RefundRequestDeleteModalProps {
   children: ReactNode;
+  loading: boolean;
+  onDeleteRefund: () => Promise<void>;
 }
 
 export function RefundRequestDeleteModal({
   children,
+  loading,
+  onDeleteRefund,
 }: RefundRequestDeleteModalProps) {
+  const [openModal, setOpenModal] = useState(false);
+
+  async function handleOpenModal() {
+    await onDeleteRefund();
+    setOpenModal(false);
+  }
+
   return (
-    <Dialog>
+    <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <div>
@@ -38,7 +50,15 @@ export function RefundRequestDeleteModal({
           <DialogClose asChild>
             <Button variant="link">Cancelar</Button>
           </DialogClose>
-          <Button>Confirmar</Button>
+          <Button onClick={handleOpenModal}>
+            {loading ? (
+              <>
+                <CircleNotchIcon className="size-5 animate-spin" /> Enviando...
+              </>
+            ) : (
+              'Confirmar'
+            )}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
