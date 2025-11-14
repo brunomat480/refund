@@ -19,6 +19,9 @@ export function Search() {
 
   const form = useForm<SearchFormType>({
     resolver: zodResolver(searchFormSchema),
+    defaultValues: {
+      search: filters.q,
+    },
   });
 
   const searchWatch = useWatch({
@@ -27,11 +30,13 @@ export function Search() {
   });
 
   function handleSearch({ search }: SearchFormType) {
-    filters.setQ(search);
+    filters.setQ(search || null);
+
+    filters.setPage(null);
   }
 
   function handleClearSearch() {
-    filters.setQ('');
+    filters.setQ(null);
     form.reset();
   }
 

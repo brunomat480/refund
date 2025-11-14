@@ -1,3 +1,4 @@
+import { createSerializer, parseAsString } from 'nuqs';
 import type { ComponentProps } from 'react';
 import { Link } from 'react-router';
 
@@ -7,10 +8,18 @@ import { Skeleton } from '@/components/skeleton';
 import { Text } from '@/components/text';
 import { useRefunds } from '@/hooks/refunds/use-refunds';
 
+const toSearchParams = createSerializer({
+  q: parseAsString,
+});
+
 interface PaginationProps extends ComponentProps<'div'> {}
 
 export function Pagination({ ...props }: PaginationProps) {
-  const { meta, isLoadingRefunds } = useRefunds();
+  const { meta, isLoadingRefunds, filters } = useRefunds();
+
+  const params = toSearchParams({ q: filters.q || null });
+
+  const fixed = params.replace('?', '&');
 
   return (
     <div
@@ -23,7 +32,7 @@ export function Pagination({ ...props }: PaginationProps) {
           size="sm"
           disabled={isLoadingRefunds || meta!.currentPage <= 1}
         >
-          <Link to={meta?.previousPageUrl || ''}>
+          <Link to={`${meta?.previousPageUrl}${fixed}` || ''}>
             <CaretIcon className="size-6 rotate-180 select-none" />
           </Link>
         </Button>
@@ -38,7 +47,7 @@ export function Pagination({ ...props }: PaginationProps) {
           size="sm"
           disabled={isLoadingRefunds || meta!.currentPage >= meta!.lastPage}
         >
-          <Link to={meta?.nextPageUrl || ''}>
+          <Link to={`${meta?.nextPageUrl}${fixed}` || ''}>
             <CaretIcon className="size-6 select-none" />
           </Link>
         </Button>
