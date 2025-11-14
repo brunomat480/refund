@@ -20,13 +20,15 @@ import {
 } from '@/components/select';
 import { Skeleton } from '@/components/skeleton';
 import { Text } from '@/components/text';
-import { useReceipt } from '@/hooks/receipt/use-receipt';
 import { useRefund } from '@/hooks/refunds/use-refund';
 import {
   refundNewFormSchema,
   type refundNewFormType,
 } from '@/schemas/refunds-schema';
+import { createReceipt } from '@/services/receipt/create-receipt';
+import { deleteReceipt } from '@/services/receipt/delete-receipt';
 import { receiptDownload } from '@/services/receipt/receipt-download';
+import { deleteRefund } from '@/services/refunds/delete-refund';
 import { Category } from '@/types/refund';
 import { formatCurrency } from '@/utils/format-currency';
 
@@ -43,6 +45,7 @@ const options = [
 interface RefundFormProps {
   view?: boolean;
   refund?: {
+    id: string | undefined;
     title: string | undefined;
     category: string | undefined;
     value: number | undefined;
@@ -56,10 +59,10 @@ export function RefundForm({ view, refund, loading }: RefundFormProps) {
   const queryClient = useQueryClient();
 
   const { createNewRefund } = useRefund();
-  const { createNewReceipt } = useReceipt();
 
   const [isCreatingRefund, setIsCreatingRefund] = useTransition();
   const [isDownloadFile, setIsDownloadFile] = useTransition();
+  const [isDeleteRefund, setIsDeleteRefund] = useTransition();
 
   const form = useForm<refundNewFormType>({
     resolver: zodResolver(refundNewFormSchema),
@@ -105,7 +108,7 @@ export function RefundForm({ view, refund, loading }: RefundFormProps) {
 
     setIsCreatingRefund(async () => {
       try {
-        const createReceiptResponse = await createNewReceipt({
+        const createReceiptResponse = await createReceipt({
           receiptFile: receiptFile[0],
         });
 
@@ -133,6 +136,22 @@ export function RefundForm({ view, refund, loading }: RefundFormProps) {
         open(`${env.VITE_BASE_URL_API}${receiptFileResponse.url}`, '_blank');
       } catch {
         toast.error('Erro ao tentar abrir comprovante, tente novamente!');
+      }
+    });
+  }
+
+  async function handleDeleteRefund() {
+    setIsDeleteRefund(async () => {
+      try {
+        await deleteReceipt(refund?.receiptId);
+        await deleteRefund(refund?.id);
+
+        queryClient.invalidateQueries({ queryKey: ['refunds'] });
+        navigate('/');
+      } catch {
+        toast.error(
+          'Erro ao tentar deletar a solicitação de reembolso, tente novamente!'
+        );
       }
     });
   }
@@ -246,7 +265,10 @@ export function RefundForm({ view, refund, loading }: RefundFormProps) {
 
         {view ? (
           !loading ? (
-            <RefundRequestDeleteModal>
+            <RefundRequestDeleteModal
+              loading={isDeleteRefund}
+              onDeleteRefund={handleDeleteRefund}
+            >
               <Button type="button" className="w-full">
                 Excluir
               </Button>

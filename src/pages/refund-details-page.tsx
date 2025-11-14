@@ -27,10 +27,11 @@ export function RefundDetailsPage() {
           <RefundForm
             view
             refund={{
+              id: refund?.id,
               title: refund?.title,
               category: refund?.category,
               value: refund?.value,
-              receiptId: refund?.receipt.id,
+              receiptId: refund?.receipt?.id,
             }}
             loading={isLoadingRefund}
           />
