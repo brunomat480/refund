@@ -8,7 +8,7 @@ import { Text } from '@/components/text';
 import { useRefunds } from '@/hooks/refunds/use-refunds';
 
 export function HomePage() {
-  const { refunds } = useRefunds();
+  const { refunds, isLoadingRefunds } = useRefunds();
 
   return (
     <Container>
@@ -19,7 +19,7 @@ export function HomePage() {
           </Text>
           <Search />
           <Divider orientation="horizontal" />
-          <RefundRequestList refunds={refunds} />
+          <RefundRequestList refunds={refunds} loading={isLoadingRefunds} />
         </div>
         <Pagination />
       </Card>

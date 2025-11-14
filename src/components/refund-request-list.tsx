@@ -10,16 +10,18 @@ interface RefundRequestListProps extends ComponentProps<'div'> {
     category: Category;
     value: number;
   }[];
+  loading?: boolean;
 }
 
 export function RefundRequestList({
   refunds,
+  loading,
   ...props
 }: RefundRequestListProps) {
   return (
     <div className="space-y-4" {...props}>
       {refunds.map((refund) => (
-        <RefundRequest key={refund.id} refund={refund} />
+        <RefundRequest key={refund.id} refund={refund} loading={loading} />
       ))}
     </div>
   );
