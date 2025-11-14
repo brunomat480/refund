@@ -44,6 +44,7 @@ export function Pagination({ ...props }: PaginationProps) {
           )}
         </Text>
         <Button
+          asChild
           size="sm"
           disabled={isLoadingRefunds || meta!.currentPage >= meta!.lastPage}
         >
