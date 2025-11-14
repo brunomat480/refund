@@ -16,6 +16,7 @@ export const inputVariants = cva(
     },
     defaultVariants: {
       size: 'md',
+      disabled: false,
     },
   }
 );
@@ -42,9 +43,10 @@ export function Input({
       {label && (
         <Text
           as="label"
+          data-disabled={disabled}
           variant="label"
           htmlFor={props.name}
-          className="group-focus-within:text-green-100"
+          className="group-focus-within:text-green-100 data-[disabled=true]:pointer-events-none"
         >
           {label}
         </Text>

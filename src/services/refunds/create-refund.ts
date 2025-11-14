@@ -9,7 +9,7 @@ export interface CreateRefundBody {
 }
 
 interface CreateRefundResponse {
-  refunds: Refund;
+  refund: Refund;
 }
 
 export async function createRefund({

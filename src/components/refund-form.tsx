@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { type ChangeEvent, useTransition } from 'react';
+import { type ChangeEvent, useEffect, useTransition } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/select';
+import { Skeleton } from '@/components/skeleton';
 import { Text } from '@/components/text';
 import { useReceipt } from '@/hooks/receipt/use-receipt';
 import { useRefund } from '@/hooks/refunds/use-refund';
@@ -25,7 +26,11 @@ import {
   refundNewFormSchema,
   type refundNewFormType,
 } from '@/schemas/refunds-schema';
+import { receiptDownload } from '@/services/receipt/receipt-download';
+import { Category } from '@/types/refund';
 import { formatCurrency } from '@/utils/format-currency';
+
+import { env } from '../../env';
 
 const options = [
   { value: 'food', label: 'Alimentação' },
@@ -37,9 +42,16 @@ const options = [
 
 interface RefundFormProps {
   view?: boolean;
+  refund?: {
+    title: string | undefined;
+    category: string | undefined;
+    value: number | undefined;
+    receiptId: string | undefined;
+  };
+  loading?: boolean;
 }
 
-export function RefundForm({ view }: RefundFormProps) {
+export function RefundForm({ view, refund, loading }: RefundFormProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -47,13 +59,19 @@ export function RefundForm({ view }: RefundFormProps) {
   const { createNewReceipt } = useReceipt();
 
   const [isCreatingRefund, setIsCreatingRefund] = useTransition();
+  const [isDownloadFile, setIsDownloadFile] = useTransition();
 
   const form = useForm<refundNewFormType>({
     resolver: zodResolver(refundNewFormSchema),
-    defaultValues: {
-      category: undefined,
-    },
   });
+
+  useEffect(() => {
+    if (view && refund) {
+      form.setValue('title', refund.title || '');
+      form.setValue('category', refund.category as Category);
+      form.setValue('value', formatCurrency(refund.value || 0) || '');
+    }
+  }, [refund, form, view]);
 
   const titleError = form.formState.errors.title?.message;
   const categoryError = form.formState.errors.category?.message;
@@ -91,13 +109,6 @@ export function RefundForm({ view }: RefundFormProps) {
           receiptFile: receiptFile[0],
         });
 
-        console.log({
-          title,
-          category,
-          value: valueConvertNumber,
-          receipt: createReceiptResponse.receipt.id,
-        });
-
         await createNewRefund({
           title,
           category,
@@ -114,21 +125,39 @@ export function RefundForm({ view }: RefundFormProps) {
     });
   }
 
+  function handleReceiptDownload() {
+    setIsDownloadFile(async () => {
+      try {
+        const receiptFileResponse = await receiptDownload(refund?.receiptId);
+
+        open(`${env.VITE_BASE_URL_API}${receiptFileResponse.url}`, '_blank');
+      } catch {
+        toast.error('Erro ao tentar abrir comprovante, tente novamente!');
+      }
+    });
+  }
+
   return (
     <FormProvider {...form}>
       <form
         onSubmit={form.handleSubmit(handleCreateRefund)}
         className="mt-10 space-y-6"
       >
-        <Input
-          label="NOME DA SOLICITAÇÃO"
-          disabled={view || isCreatingRefund}
-          error={titleError}
-          {...form.register('title')}
-        />
+        <div className="relative">
+          <Input
+            label="NOME DA SOLICITAÇÃO"
+            disabled={view || isCreatingRefund}
+            error={titleError}
+            {...form.register('title')}
+          />
+
+          {loading && (
+            <Skeleton className="absolute right-0 bottom-0 left-0 h-12" />
+          )}
+        </div>
 
         <div className="flex flex-wrap items-start gap-4 sm:flex-nowrap">
-          <div className={inputWrapperVariants()}>
+          <div className={inputWrapperVariants({ className: 'relative' })}>
             <Text
               as="label"
               variant="label"
@@ -142,14 +171,14 @@ export function RefundForm({ view }: RefundFormProps) {
               control={form.control}
               render={({ field }) => (
                 <Select
-                  onValueChange={field.onChange}
                   value={field.value || ''}
+                  onValueChange={field.onChange}
                 >
                   <SelectTrigger
                     id="category"
                     data-error={!!categoryError}
                     disabled={view || isCreatingRefund}
-                    className="data-[error=true]:border-red-500"
+                    className="disabled:opacity-50 data-[error=true]:border-red-500"
                   >
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
@@ -164,30 +193,48 @@ export function RefundForm({ view }: RefundFormProps) {
               )}
             />
 
-            {categoryError && (
-              <Text variant="small" className="text-red-500">
-                {categoryError}
-              </Text>
+            {loading && (
+              <Skeleton className="absolute right-0 bottom-0 left-0 h-12" />
             )}
           </div>
+          <div className="relative w-full">
+            <Input
+              label="VALOR"
+              placeholder="0,00"
+              disabled={view || isCreatingRefund}
+              autoComplete="off"
+              className="sm:max-w-38.5"
+              error={valueError}
+              {...form.register('value', {
+                onChange: handleValue,
+              })}
+            />
 
-          <Input
-            label="VALOR"
-            placeholder="0,00"
-            disabled={view || isCreatingRefund}
-            className="sm:max-w-38.5"
-            error={valueError}
-            {...form.register('value', {
-              onChange: handleValue,
-            })}
-          />
+            {loading && (
+              <Skeleton className="absolute right-0 bottom-0 left-0 h-12" />
+            )}
+          </div>
         </div>
 
         {view ? (
-          <Button type="button" variant="link" className="group mx-auto">
-            <FileIcon className="size-4.5 stroke-gray-200 stroke-12 group-hover:stroke-green-100 group-active:stroke-green-100" />
-            Abrir comprovante
-          </Button>
+          !loading ? (
+            <Button
+              type="button"
+              variant="link"
+              disabled={isCreatingRefund || isDownloadFile}
+              onClick={handleReceiptDownload}
+              className="group mx-auto"
+            >
+              {!isDownloadFile ? (
+                <FileIcon className="size-4.5 stroke-gray-200 stroke-12 group-hover:stroke-green-100 group-active:stroke-green-100" />
+              ) : (
+                <CircleNotchIcon className="size-4.5 animate-spin stroke-gray-200 stroke-12" />
+              )}
+              Abrir comprovante
+            </Button>
+          ) : (
+            <Skeleton className="mx-auto h-4 w-full max-w-56" />
+          )
         ) : (
           <InputFile
             allowedExtensions={['pdf']}
@@ -198,11 +245,15 @@ export function RefundForm({ view }: RefundFormProps) {
         )}
 
         {view ? (
-          <RefundRequestDeleteModal>
-            <Button type="button" className="w-full">
-              Excluir
-            </Button>
-          </RefundRequestDeleteModal>
+          !loading ? (
+            <RefundRequestDeleteModal>
+              <Button type="button" className="w-full">
+                Excluir
+              </Button>
+            </RefundRequestDeleteModal>
+          ) : (
+            <Skeleton className="h-12 w-full" />
+          )
         ) : (
           <Button disabled={isCreatingRefund} type="submit" className="w-full">
             {isCreatingRefund ? (
