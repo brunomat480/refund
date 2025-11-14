@@ -1,21 +1,48 @@
 import type { ComponentProps } from 'react';
+import { Link } from 'react-router';
 
 import CaretIcon from '@/assets/icons/caret.svg?react';
 import { Button } from '@/components/button';
+import { Skeleton } from '@/components/skeleton';
 import { Text } from '@/components/text';
+import { useRefunds } from '@/hooks/refunds/use-refunds';
 
 interface PaginationProps extends ComponentProps<'div'> {}
 
 export function Pagination({ ...props }: PaginationProps) {
+  const { meta, isLoadingRefunds } = useRefunds();
+
   return (
-    <div className="flex items-center justify-center gap-1.5" {...props}>
-      <Button size="sm">
-        <CaretIcon className="size-6 rotate-180" />
-      </Button>
-      <Text variant="body">1/3</Text>
-      <Button size="sm">
-        <CaretIcon className="size-6" />
-      </Button>
+    <div
+      className="flex min-w-26.5 items-center justify-center gap-1.5"
+      {...props}
+    >
+      <div className="flex min-w-26.5 items-center justify-between">
+        <Button
+          asChild
+          size="sm"
+          disabled={isLoadingRefunds || meta!.currentPage <= 1}
+        >
+          <Link to={meta?.previousPageUrl || ''}>
+            <CaretIcon className="size-6 rotate-180 select-none" />
+          </Link>
+        </Button>
+        <Text variant="body" className="select-none">
+          {isLoadingRefunds ? (
+            <Skeleton className="h-5 w-[1.323125rem]" />
+          ) : (
+            `${meta?.currentPage}/${meta?.lastPage}`
+          )}
+        </Text>
+        <Button
+          size="sm"
+          disabled={isLoadingRefunds || meta!.currentPage >= meta!.lastPage}
+        >
+          <Link to={meta?.nextPageUrl || ''}>
+            <CaretIcon className="size-6 select-none" />
+          </Link>
+        </Button>
+      </div>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 import CheckCircleImage from '@/assets/images/check-circle.svg?react';
 import { Button } from '@/components/button';
 import { Card } from '@/components/card';
@@ -20,8 +22,8 @@ export function SendingRefundRequestPage() {
             o setor financeiro irá entrar em contato com você.
           </Text>
         </div>
-        <Button type="button" className="mt-10 w-full">
-          Nova solicitação
+        <Button asChild type="button" className="mt-10 w-full">
+          <Link to="/refund/new">Nova solicitação</Link>
         </Button>
       </Card>
     </Container>

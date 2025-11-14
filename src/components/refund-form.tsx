@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { type ChangeEvent, useTransition } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -40,13 +41,14 @@ interface RefundFormProps {
 
 export function RefundForm({ view }: RefundFormProps) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { createNewRefund } = useRefund();
   const { createNewReceipt } = useReceipt();
 
   const [isCreatingRefund, setIsCreatingRefund] = useTransition();
 
-  const form = useForm({
+  const form = useForm<refundNewFormType>({
     resolver: zodResolver(refundNewFormSchema),
     defaultValues: {
       category: undefined,
@@ -79,7 +81,10 @@ export function RefundForm({ view }: RefundFormProps) {
     value,
     receiptFile,
   }: refundNewFormType) {
-    const valueCovertNumber = Number(value.replace(',', '.'));
+    const valueConvertNumber = Number(
+      value.replaceAll(/\./g, '').replace(',', '.')
+    );
+
     setIsCreatingRefund(async () => {
       try {
         const createReceiptResponse = await createNewReceipt({
@@ -89,18 +94,19 @@ export function RefundForm({ view }: RefundFormProps) {
         console.log({
           title,
           category,
-          value: valueCovertNumber,
+          value: valueConvertNumber,
           receipt: createReceiptResponse.receipt.id,
         });
 
         await createNewRefund({
           title,
           category,
-          value: valueCovertNumber,
+          value: valueConvertNumber,
           receipt: createReceiptResponse.receipt.id,
         });
 
         form.reset();
+        queryClient.invalidateQueries({ queryKey: ['refunds'] });
         navigate('/refund/success');
       } catch {
         toast.error('Erro ao solicitar reembolso, tente novamente!');
