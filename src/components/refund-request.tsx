@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import BedIcon from '@/assets/icons/bed.svg?react';
 import ForkKnifeIcon from '@/assets/icons/fork-knife.svg?react';
 import PoliceCarIcon from '@/assets/icons/police-car.svg?react';
-import ReceipIcon from '@/assets/icons/receipt.svg';
+import ReceipIcon from '@/assets/icons/receipt.svg?react';
 import WrenchIcon from '@/assets/icons/wrench.svg?react';
 import { Skeleton } from '@/components/skeleton';
 import { Text } from '@/components/text';
