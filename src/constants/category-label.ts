@@ -1,9 +1,9 @@
-import type { CategoryEnum } from '@/schemas/refunds-schema';
+import { Category } from '@/types/refund';
 
-export const CategoryLabel: Record<CategoryEnum, string> = {
-  food: 'Alimentação',
-  hosting: 'Hospedagem',
-  transport: 'Transporte',
-  services: 'Serviços',
-  other: 'Outros',
+export const CategoryLabel: Record<Category, string> = {
+  [Category.FOOD]: 'Alimentação',
+  [Category.HOSTING]: 'Hospedagem',
+  [Category.TRANSPORT]: 'Transporte',
+  [Category.SERVICES]: 'Serviços',
+  [Category.OTHER]: 'Outros',
 };

@@ -1,12 +1,13 @@
 import type { ComponentProps } from 'react';
 
 import { RefundRequest } from '@/components/refund-request';
+import type { Category } from '@/types/refund';
 
 interface RefundRequestListProps extends ComponentProps<'div'> {
   refunds: {
     id: string;
     title: string;
-    category: string;
+    category: Category;
     value: number;
   }[];
 }

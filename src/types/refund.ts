@@ -17,10 +17,18 @@ export interface BaseResponse<T> {
   data: T[];
 }
 
+export enum Category {
+  FOOD = 'food',
+  HOSTING = 'hosting',
+  TRANSPORT = 'transport',
+  SERVICES = 'services',
+  OTHER = 'other',
+}
+
 export interface Refund {
   id: string;
   title: string;
-  category: string;
+  category: Category;
   value: number;
   deletedAt: string | null;
   createdAt: string;

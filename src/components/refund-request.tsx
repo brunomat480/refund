@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import ForkKnifeIcon from '@/assets/icons/fork-knife.svg?react';
 import { Skeleton } from '@/components/skeleton';
 import { Text } from '@/components/text';
+import { CategoryLabel } from '@/constants/category-label';
+import type { Category } from '@/types/refund';
 import { formatCurrency } from '@/utils/format-currency';
 
 interface RefundRequestProps {
@@ -10,7 +12,7 @@ interface RefundRequestProps {
   refund: {
     id: string;
     title: string;
-    category: string;
+    category: Category;
     value: number;
   };
 }
@@ -36,7 +38,7 @@ export function RefundRequest({ refund, loading }: RefundRequestProps) {
                 {refund?.title}
               </Text>
               <Text as="small" variant="small">
-                {refund?.category}
+                {CategoryLabel[refund.category]}
               </Text>
             </>
           ) : (
