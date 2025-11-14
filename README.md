@@ -52,7 +52,6 @@ A aplicação estará disponível em `http://localhost:5173`
 1. Clone o repositório da API:
 ```bash
 git clone https://github.com/brunomat480/refund-api.git
-cd refund-api
 ```
 
 2. Instale as dependências:
