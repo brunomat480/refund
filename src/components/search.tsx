@@ -20,7 +20,7 @@ export function Search() {
   const form = useForm<SearchFormType>({
     resolver: zodResolver(searchFormSchema),
     defaultValues: {
-      search: filters.q,
+      search: filters.q || '',
     },
   });
 
@@ -37,7 +37,9 @@ export function Search() {
 
   function handleClearSearch() {
     filters.setQ(null);
-    form.reset();
+    form.reset({
+      search: '',
+    });
   }
 
   return (
