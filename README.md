@@ -23,8 +23,8 @@ A aplicação permite criar, visualizar e excluir solicitações de reembolso. T
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/brunomat480/hair-day.git
-cd hair-day
+git clone https://github.com/brunomat480/refund.git
+cd refund
 ```
 
 2. Instale as dependências:
