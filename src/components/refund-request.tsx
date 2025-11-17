@@ -48,7 +48,11 @@ export function RefundRequest({ refund, loading }: RefundRequestProps) {
         <div className="flex flex-col">
           {!loading ? (
             <>
-              <Text as="strong" variant="medium-bold" className="text-gray-100">
+              <Text
+                as="strong"
+                variant="medium-bold"
+                className="max-w-60 truncate text-gray-100"
+              >
                 {refund?.title}
               </Text>
               <Text as="small" variant="small">
